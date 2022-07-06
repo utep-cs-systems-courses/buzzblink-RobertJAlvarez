@@ -54,7 +54,6 @@ switch_interrupt_handler()
   }
 }
 
-
 /* Switch on P1 (S2) */
 void
 __interrupt_vec(PORT1_VECTOR) Port_1(){

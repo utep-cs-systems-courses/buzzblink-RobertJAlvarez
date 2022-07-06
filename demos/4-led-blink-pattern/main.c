@@ -19,8 +19,7 @@ int blinkLimit = 5;  // duty cycle = 1/blinkLimit
 int blinkCount = 0;  // cycles 0...blinkLimit-1
 int secondCount = 0; // state var representing repeating time 0…1s
 
-void
-__interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
+void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
   // handle blinking 
   blinkCount ++;
@@ -34,8 +33,8 @@ __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
   secondCount ++;
   if (secondCount >= 250) {  // once each second
     secondCount = 0;
-    blinkLimit ++;	     // reduce duty cycle
-    if (blinkLimit >= 8)     // but don't let duty cycle go below 1/7.
+    blinkLimit ++;	        // reduce duty cycle
+    if (blinkLimit >= 8)    // but don't let duty cycle go below 1/7.
       blinkLimit = 0;
   }
 } 
