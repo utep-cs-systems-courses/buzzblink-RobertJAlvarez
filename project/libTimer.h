@@ -6,6 +6,9 @@ void enableWDTInterrupts();
 void timerAUpmode();
 
 unsigned char gert_sr();
-void set_sr(), or_sr(), and_sr();
+void set_sr(int sr_val);
+int get_sr(void);
+void or_sr(int or_val);
+void and_sr(int and_val);
 
 #endif // included

@@ -1,8 +1,19 @@
 #include <msp430.h>
-#include "stateMachines.h"
+#include "libTimer.h"
+#include "led.h"
+#include "wdInterruptHandler.h"
 
-/* Switch on P1 (S2) */
-static int buttonDown;
+void switch_init() {
+  P1REN |= SWITCHES;	/* enables resistors for switches */
+  P1IE |= SWITCHES;		/* enable interrupts from switches */
+  P1OUT |= SWITCHES;	/* pull-ups for switches */
+  P1DIR &= ~SWITCHES;	/* set switches' bits for input */
+}
+
+void wdt_init() {
+  configureClocks();		  /* setup master oscillator, CPU & peripheral clocks */
+  enableWDTInterrupts();	/* enable periodic interrupt */
+}
 
 void switch_interrupt_handler()
 {
