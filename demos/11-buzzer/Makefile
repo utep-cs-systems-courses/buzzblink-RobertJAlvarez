@@ -22,4 +22,3 @@ clean: $^
 buzzer.c: buzzer.h
 buzzerMain.c: buzzer.h
 
-
