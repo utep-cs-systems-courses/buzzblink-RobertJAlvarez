@@ -8,7 +8,10 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: proj.elf 
+all: timLib proj.elf 
+
+timLib:
+	(cd timerLib && make install)
 
 #additional rules for files
 proj.elf: ${COMMON_OBJECTS} buzzer.o p1_interrupt_handler.o main.o stateMachines.o led.o switches.o wdInterruptHandler.o ./lib/libTimer.a
@@ -18,6 +21,7 @@ load: proj.elf
 	msp430loader.sh proj.elf
 
 clean:
+	rm -rf h lib
 	rm -f *.o *.elf
 
 led.o: led.c led.h
