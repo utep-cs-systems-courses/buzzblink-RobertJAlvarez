@@ -19,8 +19,7 @@ int main(void) {
 static char led_state = 0;
 static char nCalls = 0;
 
-void
-__interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
+void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
   if (nCalls >= 250) {
     nCalls = 0;
