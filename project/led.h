@@ -11,10 +11,6 @@ extern unsigned char led_changed;
 
 void led_init();    //Initialize LEDs
 void led_update();  //Update LEDs
-void SW0_leds();    //Change from green to red and vice versa
-void SW1_leds();    //Use advance state machine
-void SW2_leds();
-void SW3_leds();
 
 // These are boolean flags
 extern unsigned char leds_changed, gree_led_state, red_led_state;

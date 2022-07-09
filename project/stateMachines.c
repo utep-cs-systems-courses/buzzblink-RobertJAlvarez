@@ -2,6 +2,9 @@
 #include "stateMachines.h"
 #include "led.h"
 
+/*
+  Alternate led pattern functions
+*/
 char toggle_red()		/* always toggle! */
 {
   static char state = 0;
@@ -29,7 +32,7 @@ char toggle_green()	/* only toggle green if red is on!  */
   return changed;
 }
 
-void state_advance()  /* alternate between toggling red & green */
+void altern_led_pattern()  /* alternate between toggling red & green */
 {
   char changed = 0;  
 
@@ -41,5 +44,53 @@ void state_advance()  /* alternate between toggling red & green */
 
   led_changed = changed;
   led_update();
+}
+
+/*
+  Dimming led pattern functions
+*/
+void greenControl(int on)
+{
+  if (on) {
+    P1OUT |= LED_GREEN;
+  } else {
+    P1OUT &= ~LED_GREEN;
+  }
+}
+
+// blink state machine
+static int blinkLimit = 5;   //  state var representing reciprocal of duty cycle 
+void blinkUpdate() // called every 1/250s to blink with duty cycle 1/blinkLimit
+{
+  static int blinkCount = 0; // state var representing blink state
+  blinkCount++;
+  if (blinkCount >= blinkLimit) {
+    blinkCount = 0;
+    greenControl(1);
+  } else
+    greenControl(0);
+}
+
+void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, one step/sec
+{
+  blinkLimit++;  // reduce duty cycle
+  if (blinkLimit >= 8)  // but don't let duty cycle go below 1/7.
+    blinkLimit = 0;
+}
+
+void secondUpdate()  // called every 1/250 sec to call oncePerSecond once per second
+{
+  static int secondCount = 0; // state variable representing repeating time 0…1s
+  secondCount++;
+  if (secondCount >= 250) { // once each second
+    secondCount = 0;
+    oncePerSecond();
+  }
+}
+
+void dimmingStateMachines() // called every 1/250 sec
+{
+  blinkUpdate();
+  secondUpdate();
 }
 

@@ -17,11 +17,12 @@ void __interrupt_vec(WDT_VECTOR) WDT(){	/* 250 interrupts/sec */
   switch (n_switch_down) {
   case 0:
     if (++blink_count >= 250) {
-      state_advance();
+      altern_led_pattern();
       blink_count = 0;
     }
     break;
   case 1:
+    dimmingStateMachines();
     break;
   case 2:
     break;

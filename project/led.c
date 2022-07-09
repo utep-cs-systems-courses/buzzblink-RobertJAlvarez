@@ -13,10 +13,10 @@ void led_init()
   led_changed = 1;
   led_update();
 }
-
+/*
 void SW0_leds()
 {
-  char ledFlags = 0; /* by default, no LEDs on */
+  char ledFlags = 0; // by default, no LEDs on
 
   ledFlags |= SW_down[0] ? LED_GREEN : 0;
   ledFlags |= SW_down[0] ? 0 : LED_RED;
@@ -24,22 +24,7 @@ void SW0_leds()
   P1OUT &= (0xff - LEDS) | ledFlags; // clear bits for off leds
   P1OUT |= ledFlags;         // set bits for on leds
 }
-
-void SW1_leds()
-{
-  //
-}
-
-void SW2_leds()
-{
-  //
-}
-
-void SW3_leds()
-{
-  //
-}
-
+*/
 void led_update()
 {
   if (led_changed) {

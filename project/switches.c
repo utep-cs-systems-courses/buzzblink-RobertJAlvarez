@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include "switches.h"
 #include "led.h"
+#include "buzzer.h"
 
 char SW_down[4]; //effectively boolean
 
@@ -30,8 +31,10 @@ void switch_interrupt_handler()
   char p2val = switch_update_interrupt_sense();
   char n_switch = 1;
   for (int i=0; i < 4; i++) {
-    if ((p2val & n_switch) ? 0 : 1) // 0 when n_switch is up
+    if ((p2val & n_switch) ? 0 : 1) { // 0 when n_switch is up
       n_switch_down = i;
+      buzzer_set_period(100); //No buzzing!
+    }
     n_switch = n_switch << 1;
   }
 }

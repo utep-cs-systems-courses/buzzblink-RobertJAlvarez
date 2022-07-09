@@ -22,7 +22,7 @@ int secondCount = 0; // state var representing repeating time 0…1s
 void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
 {
   // handle blinking 
-  blinkCount ++;
+  blinkCount++;
   if (blinkCount >= blinkLimit) { // on for 1 interrupt period
     blinkCount = 0;
     P1OUT |= LED_GREEN;
@@ -30,7 +30,7 @@ void __interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
     P1OUT &= ~LED_GREEN;
 
   // measure a second
-  secondCount ++;
+  secondCount++;
   if (secondCount >= 250) {  // once each second
     secondCount = 0;
     blinkLimit ++;	        // reduce duty cycle
