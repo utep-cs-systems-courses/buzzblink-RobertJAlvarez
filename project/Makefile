@@ -14,7 +14,7 @@ timLib:
 	(cd timerLib && make install)
 
 #additional rules for files
-proj.elf: ${COMMON_OBJECTS} buzzer.o interrupt_handler.o main.o stateMachines.o led.o switches.o wdInterruptHandler.o ./lib/libTimer.a
+proj.elf: ${COMMON_OBJECTS} buzzer.o interrupt_handler.o main.o stateMachines.o led.o switches.o  ./lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: proj.elf
@@ -25,8 +25,6 @@ clean:
 	rm -f *.o *.elf
 
 led.o: led.c led.h
-
-wdInterruptHandler.o: stateMachines.h
 
 stateMachines.o: led.h stateMachines.h
 

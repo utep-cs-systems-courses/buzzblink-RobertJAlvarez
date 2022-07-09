@@ -2,32 +2,37 @@
 #include "switches.h"
 #include "led.h"
 
-char switch_state_down, switch_state_changed; /* effectively boolean */
+char SW_down[4]; //effectively boolean
 
 static char switch_update_interrupt_sense()
 {
-  char p1val = P1IN;
+  char p2val = P2IN;
   /* update switch interrupt to detect changes from current buttons */
-  P1IES |= (p1val & SWITCHES);	/* if switch up, sense down */
-  P1IES &= (p1val | ~SWITCHES);	/* if switch down, sense up */
-  return p1val;
+  P2IES |= (p2val & SWITCHES);	/* if switch up, sense down */
+  P2IES &= (p2val | ~SWITCHES);	/* if switch down, sense up */
+  return p2val;
 }
 
 void switch_init()		/* setup switch */
 {
-  P1REN |= SWITCHES;	/* enables resistors for switches */
-  P1IE |= SWITCHES;		/* enable interrupts from switches */
-  P1OUT |= SWITCHES;	/* pull-ups for switches */
-  P1DIR &= ~SWITCHES;	/* set switches' bits for input */
+  P2REN |= SWITCHES;	/* enables resistors for switches */
+  P2IE |= SWITCHES;		/* enable interrupts from switches */
+  P2OUT |= SWITCHES;	/* pull-ups for switches */
+  P2DIR &= ~SWITCHES;	/* set switches' bits for input */
   switch_update_interrupt_sense();
   led_update();
 }
 
+extern char n_switch_down;
+
 void switch_interrupt_handler()
 {
-  char p1val = switch_update_interrupt_sense();
-  switch_state_down = (p1val & SW1) ? 0 : 1; /* 0 when SW1 is up */
-  switch_state_changed = 1;
-  led_update();
+  char p2val = switch_update_interrupt_sense();
+  char n_switch = 1;
+  for (int i=0; i < 4; i++) {
+    if ((p2val & n_switch) ? 0 : 1) // 0 when n_switch is up
+      n_switch_down = i;
+    n_switch = n_switch << 1;
+  }
 }
 

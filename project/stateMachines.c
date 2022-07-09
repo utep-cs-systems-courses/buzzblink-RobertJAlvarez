@@ -29,7 +29,7 @@ char toggle_green()	/* only toggle green if red is on!  */
   return changed;
 }
 
-void state_advance()		/* alternate between toggling red & green */
+void state_advance()  /* alternate between toggling red & green */
 {
   char changed = 0;  
 
