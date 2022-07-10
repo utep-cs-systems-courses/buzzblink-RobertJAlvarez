@@ -1,6 +1,7 @@
 #include <msp430.h>
 #include "stateMachines.h"
 #include "led.h"
+#include "buzzer.h"
 
 /*
   Alternate led pattern functions
@@ -59,12 +60,11 @@ void greenControl(int on)
 }
 
 // blink state machine
-static int blinkLimit = 5;   //  state var representing reciprocal of duty cycle 
-void blinkUpdate() // called every 1/250s to blink with duty cycle 1/blinkLimit
+static int blinkLimit = 5;    // state var representing reciprocal of duty cycle 
+void blinkUpdate()            // called every 1/250s to blink with duty cycle 1/blinkLimit
 {
-  static int blinkCount = 0; // state var representing blink state
-  blinkCount++;
-  if (blinkCount >= blinkLimit) {
+  static int blinkCount = 0;  // state var representing blink state
+  if (blinkCount++ >= blinkLimit) {
     blinkCount = 0;
     greenControl(1);
   } else
@@ -73,16 +73,21 @@ void blinkUpdate() // called every 1/250s to blink with duty cycle 1/blinkLimit
 
 void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, one step/sec
 {
-  blinkLimit++;  // reduce duty cycle
-  if (blinkLimit >= 8)  // but don't let duty cycle go below 1/7.
+  static unsigned short period_inc = 2000;
+  static unsigned short curr_period = 0;
+
+  if (++blinkLimit >= 8) {  // but don't let duty cycle go below 1/7.
     blinkLimit = 0;
+    curr_period = 0;
+  }
+  curr_period += period_inc;
+  buzzer_set_period(curr_period);
 }
 
 void secondUpdate()  // called every 1/250 sec to call oncePerSecond once per second
 {
   static int secondCount = 0; // state variable representing repeating time 0…1s
-  secondCount++;
-  if (secondCount >= 250) { // once each second
+  if (secondCount++ >= 250) { // once each second
     secondCount = 0;
     oncePerSecond();
   }
