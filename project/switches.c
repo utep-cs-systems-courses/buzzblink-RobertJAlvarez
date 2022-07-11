@@ -3,8 +3,6 @@
 #include "led.h"
 #include "buzzer.h"
 
-char SW_down[4]; //effectively boolean
-
 static char switch_update_interrupt_sense()
 {
   char p2val = P2IN;
@@ -24,15 +22,16 @@ void switch_init()		/* setup switch */
   led_update();
 }
 
-extern char n_switch_down;
+char n_switch_down = 0;
 
 void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
   char n_switch = 1;
+  //Get switch that was press down
   for (int i=0; i < 4; i++) {
     if ((p2val & n_switch) ? 0 : 1) { // 0 when n_switch is up
-      n_switch_down = i;
+      n_switch_down = i+1;
       buzzer_set_period(100); //No buzzing!
     }
     n_switch = n_switch << 1;

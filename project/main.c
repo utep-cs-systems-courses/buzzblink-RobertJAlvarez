@@ -4,8 +4,6 @@
 #include "buzzer.h"
 #include "led.h"
 
-char n_switch_down;
-
 int main(void) {
   configureClocks();		  /* setup master oscillator, CPU & peripheral clocks */
   switch_init();

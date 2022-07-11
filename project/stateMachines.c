@@ -20,7 +20,7 @@ char toggle_red()		/* always toggle! */
     state = 0;
     break;
   }
-  return 1;			/* always changes an led */
+  return 1;			/* always changes a led */
 }
 
 char toggle_green()	/* only toggle green if red is on!  */
@@ -50,17 +50,7 @@ void altern_led_pattern()  /* alternate between toggling red & green */
 /*
   Dimming led pattern functions
 */
-void greenControl(int on)
-{
-  if (on) {
-    P1OUT |= LED_GREEN;
-  } else {
-    P1OUT &= ~LED_GREEN;
-  }
-}
-
-// blink state machine
-static int blinkLimit = 5;    // state var representing reciprocal of duty cycle 
+static int blinkLimit = 0;    // state var representing reciprocal of duty cycle 
 void blinkUpdate()            // called every 1/250s to blink with duty cycle 1/blinkLimit
 {
   static int blinkCount = 0;  // state var representing blink state
@@ -73,12 +63,14 @@ void blinkUpdate()            // called every 1/250s to blink with duty cycle 1/
 
 void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, one step/sec
 {
-  static unsigned short period_inc = 2000;
+  static unsigned short period_inc = 1000;
   static unsigned short curr_period = 0;
 
   if (++blinkLimit >= 8) {  // but don't let duty cycle go below 1/7.
     blinkLimit = 0;
-    curr_period = 0;
+    if (red_on)
+      curr_period = 0;      // reset buzzer period
+    change_red();
   }
   curr_period += period_inc;
   buzzer_set_period(curr_period);
@@ -97,5 +89,19 @@ void dimmingStateMachines() // called every 1/250 sec
 {
   blinkUpdate();
   secondUpdate();
+}
+
+/*
+  //
+*/
+
+
+/*
+  Turn of leds and stop buzzing
+*/
+void off_leds_buzzer()
+{
+  led_off();
+  buzzer_set_period(100);
 }
 

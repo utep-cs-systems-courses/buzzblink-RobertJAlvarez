@@ -4,6 +4,6 @@
 void altern_led_pattern();
 
 void dimmingStateMachines();
-void greenControl(int on);
+void off_leds_buzzer();
 
 #endif // included

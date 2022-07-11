@@ -13,18 +13,7 @@ void led_init()
   led_changed = 1;
   led_update();
 }
-/*
-void SW0_leds()
-{
-  char ledFlags = 0; // by default, no LEDs on
 
-  ledFlags |= SW_down[0] ? LED_GREEN : 0;
-  ledFlags |= SW_down[0] ? 0 : LED_RED;
-
-  P1OUT &= (0xff - LEDS) | ledFlags; // clear bits for off leds
-  P1OUT |= ledFlags;         // set bits for on leds
-}
-*/
 void led_update()
 {
   if (led_changed) {
@@ -34,5 +23,30 @@ void led_update()
     P1OUT |= ledFlags;		            // set bit for on leds
     led_changed = 0;
   }
+}
+
+void greenControl(int on)
+{
+  if (on) {
+    P1OUT |= LED_GREEN;   //Turn on green light
+    green_on = 1;
+  } else {
+    P1OUT &= ~LED_GREEN;  //Turn off green light
+    green_on = 0;
+  }
+}
+
+void change_red()
+{
+  P1OUT ^= LED_RED;
+  red_on ^= 1;
+}
+
+void led_off()
+{
+  red_on = 0;
+  green_on = 0;
+  led_changed = 1;
+  led_update();
 }
 
