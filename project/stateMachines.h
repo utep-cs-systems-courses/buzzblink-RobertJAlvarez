@@ -1,9 +1,8 @@
 #ifndef stateMachine_included
 #define stateMachine_included
 
-void altern_led_pattern();
-
-void dimmingStateMachines();
+void led_pattern_state_machine();
+void dimming_state_machines();
 void off_leds_buzzer();
 void high_to_low_buzzer();
 

@@ -47,6 +47,15 @@ void altern_led_pattern()  /* alternate between toggling red & green */
   led_update();
 }
 
+void led_pattern_state_machine()
+{
+  static char blink_count = 0;
+  if (++blink_count >= 250) {
+    altern_led_pattern();
+    blink_count = 0;
+  }
+}
+
 /*
   Dimming led pattern functions
 */
@@ -84,7 +93,7 @@ void secondUpdate()  // called every 1/250 sec to call oncePerSecond once per se
   }
 }
 
-void dimmingStateMachines() // called every 1/250 sec
+void dimming_state_machines()
 {
   blinkUpdate();
   secondUpdate();

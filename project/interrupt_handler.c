@@ -11,16 +11,12 @@ void __interrupt_vec(PORT2_VECTOR) Port_2(){
 }
 
 void __interrupt_vec(WDT_VECTOR) WDT(){	//250 interrupts/sec
-  static char blink_count = 0;
   switch (n_switch_down) {
   case 1:   //Alternate between toggling red & green
-    if (++blink_count >= 250) {
-      altern_led_pattern();
-      blink_count = 0;
-    }
+    led_pattern_state_machine();
     break;
   case 2:   //Dim green light, toggle red light and update buz
-    dimmingStateMachines();
+    dimming_state_machines();
     break;
   case 3:
     high_to_low_buzzer();
