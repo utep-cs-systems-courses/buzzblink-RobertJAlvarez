@@ -1,5 +1,5 @@
 # makfile configuration
-COMMON_OBJECTS  = 
+COMMON_OBJECTS  = buzzer.o interrupt_handler.o main.o stateMachines.o led.o switches.o
 CPU             = msp430g2553
 CFLAGS          = -mmcu=${CPU} -I./h
 LDFLAGS		= -L/opt/ti/msp430_gcc/include
@@ -8,17 +8,23 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: timLib proj.elf 
+all: timLib proj-c.elf# proj-s.elf
 
 timLib:
 	(cd timerLib && make install)
 
 #additional rules for files
-proj.elf: ${COMMON_OBJECTS} buzzer.o interrupt_handler.o main.o stateMachines.o led.o switches.o  ./lib/libTimer.a
+proj-c.elf: ${COMMON_OBJECTS} select_SM-c.o  ./lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
-load: proj.elf
-	msp430loader.sh proj.elf
+#proj-s.elf: ${COMMON_OBJECTS} select_SM-s.o ./lib/libTimer.a
+#	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
+
+load-c: proj-c.elf
+	msp430loader.sh $^
+
+#load-s: proj-s.elf
+#	msp430loader.sh $^
 
 clean:
 	rm -rf h lib
