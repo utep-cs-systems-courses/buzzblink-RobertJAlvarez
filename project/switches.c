@@ -23,11 +23,11 @@ void switch_init()		/* setup switch */
 }
 
 char n_switch_down = 0;
-
 void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
   char n_switch = 1;
+  char prev_switch = n_switch_down;
   //Get switch that was press down
   for (int i=0; i < 4; i++) {
     if ((p2val & n_switch) ? 0 : 1) { // 0 when n_switch is up
@@ -35,6 +35,13 @@ void switch_interrupt_handler()
       buzzer_set_period(100); //No buzzing!
     }
     n_switch = n_switch << 1;
+  }
+  //Only when bottom press the first time or when release
+  if (((n_switch_down == 3) && (prev_switch != n_switch_down)) || 
+      ((prev_switch == 3) && (p2val & (1 << 2)))) {
+    curr_rate -= 25;
+    if (curr_rate <= 25)
+      curr_rate = 125;
   }
 }
 

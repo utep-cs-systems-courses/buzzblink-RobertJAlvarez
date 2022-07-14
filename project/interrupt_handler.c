@@ -23,6 +23,7 @@ void __interrupt_vec(WDT_VECTOR) WDT(){	//250 interrupts/sec
     dimmingStateMachines();
     break;
   case 3:
+    high_to_low_buzzer();
     break;
   case 4:
   default:  //Turn leds off and stop buzzer

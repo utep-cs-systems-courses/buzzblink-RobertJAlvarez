@@ -64,7 +64,6 @@ void blinkUpdate()            // called every 1/250s to blink with duty cycle 1/
 void oncePerSecond() // repeatedly start bright and gradually lower duty cycle, one step/sec
 {
   static unsigned short period_inc = 1000;
-  static unsigned short curr_period = 0;
 
   if (++blinkLimit >= 8) {  // but don't let duty cycle go below 1/7.
     blinkLimit = 0;
@@ -92,12 +91,23 @@ void dimmingStateMachines() // called every 1/250 sec
 }
 
 /*
-  //
+  Go from a high to low frequency at different rates
 */
-
+void high_to_low_buzzer()
+{
+  static int count = 0;
+  static unsigned short period_inc = 500;
+  if (count++ >= curr_rate) { //curr_rate only change when switch 3 is press
+    count = 0;
+    if (curr_period > 10000)
+      curr_period = 0;
+    curr_period += period_inc;
+    buzzer_set_period(curr_period);
+  }
+}
 
 /*
-  Turn of leds and stop buzzing
+  Turn leds off and stop buzzing
 */
 void off_leds_buzzer()
 {
