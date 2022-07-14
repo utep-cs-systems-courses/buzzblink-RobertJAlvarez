@@ -8,7 +8,7 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: timLib proj-c.elf# proj-s.elf
+all: timLib proj-c.elf proj-s.elf
 
 timLib:
 	(cd timerLib && make install)
@@ -17,14 +17,14 @@ timLib:
 proj-c.elf: ${COMMON_OBJECTS} select_SM-c.o  ./lib/libTimer.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
-#proj-s.elf: ${COMMON_OBJECTS} select_SM-s.o ./lib/libTimer.a
-#	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
+proj-s.elf: ${COMMON_OBJECTS} select_SM-s.o ./lib/libTimer.a
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load-c: proj-c.elf
 	msp430loader.sh $^
 
-#load-s: proj-s.elf
-#	msp430loader.sh $^
+load-s: proj-s.elf
+	msp430loader.sh $^
 
 clean:
 	rm -rf h lib
@@ -35,4 +35,5 @@ switches.o: switches.c switches.h led.h buzzer.h
 stateMachines.o: led.h stateMachines.h buzzer.h
 buzzer.c: buzzer.h
 main.c: buzzer.h led.h switches.h
+select_SM-c.o: switches.h stateMachines.h select_SM.h
 
