@@ -6,6 +6,6 @@
 void switch_init();
 void switch_interrupt_handler();
 
-extern char n_switch_down;
+extern unsigned short n_switch_down;
 
 #endif // included

@@ -13,7 +13,7 @@ jt: .word default
 
 select_SM:
     ;; if (n_switch_down > 4) goto default
-    cmp n_switch_down, #4 ; 4 - n_switch_down
+    cmp &n_switch_down, #4 ; 4 - n_switch_down
     jnc default           ; goto default if 4 < n_switch_down
     ;; PC = jt[n_switch_down]
     mov &n_switch_down, r12

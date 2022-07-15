@@ -22,7 +22,7 @@ void switch_init()		/* setup switch */
   led_update();
 }
 
-char n_switch_down = 0;
+unsigned short n_switch_down = 0;
 void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
