@@ -27,6 +27,7 @@ load-s: proj-s.elf
 	msp430loader.sh $^
 
 clean:
+	(cd timerLib && make clean)
 	rm -rf h lib
 	rm -f *.o *.elf
 
